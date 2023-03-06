@@ -39,8 +39,9 @@ app.post("/", (req,res) => {
 
     const jsonData = JSON.stringify(data)
 
+    const LIST_ID = process.env.LIST_ID
     const API_KEY = process.env.MAILCHIMP_API_KEY
-    const url = "https://us21.api.mailchimp.com/3.0/lists/3ab9331cc9"
+    const url = "https://us21.api.mailchimp.com/3.0/lists/" + LIST_ID
     const options = {
         method : "POST",
         auth: "gagmern:"+ API_KEY
@@ -73,8 +74,3 @@ app.post("/", function(req,res){
 app.listen(3000 || process.env.PORT, () =>{
     console.log("Server is up and running on port 3000");
 })
-
-
-
-
-// /lists/list_id
