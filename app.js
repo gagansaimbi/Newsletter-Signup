@@ -46,21 +46,35 @@ app.post("/", (req,res) => {
         method : "POST",
         auth: "gagmern:"+ API_KEY
         }
-        console.log(options.auth);
+    
     const request = https.request(url, options, function(response){
-                            const status = response.statusCode
-                            console.log(status);
+                            
                             response.on("data", function(data){
-                                console.log(JSON.parse(data));
-                        })
-                        if (status===200){
-                            res.sendFile(__dirname + "/success.html")
-                        }
-                        else{
-                            res.sendFile(__dirname + "/failure.html")
-                        }
-                    })
+                                const status = response.statusCode
+                                console.log(status);
 
+                                console.log(JSON.parse(data));
+                                const meta_data = JSON.parse(data)
+                                const duplicate_check = meta_data.errors[0].error_code
+
+                                if (status===200){
+                                    // res.sendFile(__dirname + "/success.html")
+                
+                                    if ( duplicate_check === "ERROR_CONTACT_EXISTS"){
+                                        console.log("****** This is duplicate *****");
+                                        res.sendFile(__dirname + "/success_if_duplicate.html")
+                                    }
+                                    else{
+                                        console.log("###### No duplicate so new added ######");
+                                        res.sendFile(__dirname + "/success.html")
+                                    }
+                                }
+                                else{
+                                    res.sendFile(__dirname + "/failure.html")
+                                }
+                             })
+                    })
+                    
     request.write(jsonData)
     request.end()
 })
